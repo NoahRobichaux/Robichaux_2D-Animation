@@ -10,6 +10,7 @@ public class PlayerController2 : MonoBehaviour
     bool isOnGround;
     public float speed;
     public float jumpForce;
+    bool haveControl;
 
     void Start()
     {
@@ -20,31 +21,34 @@ public class PlayerController2 : MonoBehaviour
 
     void Update()
     {
-        playerRigidbody.velocity = new Vector2(Input.GetAxis("Horizontal") + speed, playerRigidbody.velocity.y);
-        if (playerRigidbody.velocity.x > 0 || playerRigidbody.velocity.x < 0)
+        if (haveControl)
         {
-            if (isOnGround)
+            playerRigidbody.velocity = new Vector2(Input.GetAxis("Horizontal") + speed, playerRigidbody.velocity.y);
+            if (playerRigidbody.velocity.x > 0 || playerRigidbody.velocity.x < 0)
             {
-                playerAnimator.SetBool("IsRunning", true);
-                if (playerRigidbody.velocity.x > 0)
+                if (isOnGround)
                 {
-                    playerSR.flipX = false;
-                }
-                if (playerRigidbody.velocity.x < 0)
-                {
-                    playerSR.flipX = true;
+                    playerAnimator.SetBool("IsRunning", true);
+                    if (playerRigidbody.velocity.x > 0)
+                    {
+                        playerSR.flipX = false;
+                    }
+                    if (playerRigidbody.velocity.x < 0)
+                    {
+                        playerSR.flipX = true;
+                    }
                 }
             }
-        }
-        else
-        {
-            playerAnimator.SetBool("IsRunning", false);
-        }
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
-        {
-            playerRigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            playerAnimator.SetBool("isJumping", true);
-            playerAnimator.SetBool("isRunning", false);
+            else
+            {
+                playerAnimator.SetBool("IsRunning", false);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                playerRigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                playerAnimator.SetBool("isJumping", true);
+                playerAnimator.SetBool("isRunning", false);
+            }
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -52,6 +56,10 @@ public class PlayerController2 : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor"))
         {
             playerAnimator.SetBool("isJumping", false);
+        }
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            playerAnimator.SetBool("isSpawning", true);
         }
     }
     private void OnCollisionStay2D(Collision2D collision)
@@ -64,5 +72,10 @@ public class PlayerController2 : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
         isOnGround = false;
+    }
+
+    public void GiveControl()
+    {
+        haveControl = true;
     }
 }
