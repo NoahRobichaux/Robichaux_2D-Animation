@@ -28,7 +28,7 @@ public class PlayerController2 : MonoBehaviour
             {
                 if (isOnGround)
                 {
-                    playerAnimator.SetBool("IsRunning", true);
+                    playerAnimator.SetBool("isRunning", true);
                     if (playerRigidbody.velocity.x > 0)
                     {
                         playerSR.flipX = false;
@@ -41,7 +41,7 @@ public class PlayerController2 : MonoBehaviour
             }
             else
             {
-                playerAnimator.SetBool("IsRunning", false);
+                playerAnimator.SetBool("isRunning", false);
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -71,9 +71,11 @@ public class PlayerController2 : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isOnGround = false;
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            isOnGround = false;
+        }
     }
-
     public void GiveControl()
     {
         haveControl = true;
