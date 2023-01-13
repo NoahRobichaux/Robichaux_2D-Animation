@@ -12,6 +12,11 @@ public class PlayerController2 : MonoBehaviour
     public float jumpForce;
     bool haveControl;
 
+    public GameObject shootPositionRight;
+    public GameObject shootPositionLeft;
+    public GameObject bullet;
+    bool isFacingRight = true;
+
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
@@ -32,10 +37,12 @@ public class PlayerController2 : MonoBehaviour
                     if (playerRigidbody.velocity.x > 0)
                     {
                         playerSR.flipX = false;
+                        isFacingRight = true;
                     }
                     if (playerRigidbody.velocity.x < 0)
                     {
                         playerSR.flipX = true;
+                        isFacingRight = false;
                     }
                 }
             }
@@ -48,6 +55,17 @@ public class PlayerController2 : MonoBehaviour
                 playerRigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
                 playerAnimator.SetBool("isJumping", true);
                 playerAnimator.SetBool("isRunning", false);
+            }
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (isFacingRight)
+                {
+                    Instantiate(bullet, shootPositionRight.transform.position, this.transform.rotation);
+                }
+                else if (!isFacingRight)
+                {
+                    Instantiate(bullet, shootPositionLeft.transform.position, this.transform.rotation);
+                }
             }
         }
     }
