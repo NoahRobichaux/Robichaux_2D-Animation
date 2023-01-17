@@ -17,6 +17,9 @@ public class PlayerController2 : MonoBehaviour
     public GameObject bullet;
     bool isFacingRight = true;
 
+    float fireRate = 0.5f;
+    float lastFired;
+
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
@@ -56,7 +59,7 @@ public class PlayerController2 : MonoBehaviour
                 playerAnimator.SetBool("isJumping", true);
                 playerAnimator.SetBool("isRunning", false);
             }
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKey(KeyCode.Return))
             {
                 if (isFacingRight)
                 {
@@ -97,5 +100,20 @@ public class PlayerController2 : MonoBehaviour
     public void GiveControl()
     {
         haveControl = true;
+    }
+    private void Fire()
+    {
+        if (Time.time > fireRate + lastFired)
+        {
+            if (isFacingRight)
+            {
+                Instantiate(bullet, shootPositionRight.transform.position, this.transform.rotation);
+            }
+            else if (!isFacingRight)
+            {
+                Instantiate(bullet, shootPositionLeft.transform.position, this.transform.rotation);
+            }
+            lastFired = Time.time;
+        }
     }
 }
