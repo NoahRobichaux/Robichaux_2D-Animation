@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Metall : MonoBehaviour
 {
+    public Animator metallAnimator;
+    public SpriteRenderer metallSR;
+
+    public float metallTransitionTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +18,7 @@ public class Metall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
